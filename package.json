@@ -1,6 +1,6 @@
 {
   "name": "@sparing-software/vue-on-resize",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Vue plugin for resize handlers",
   "main": "dist/vue-on-resize.esm.js",
   "scripts": {
