@@ -2,9 +2,10 @@
   "name": "@sparing-software/vue-on-resize",
   "version": "1.0.1",
   "description": "Vue plugin for resize handlers",
-  "main": "index.js",
+  "main": "dist/vue-on-resize.esm.js",
   "scripts": {
-    "lint": "standard",
+    "lint": "standard src/* build/*",
+    "build": "node build/build.main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +26,10 @@
   },
   "homepage": "https://github.com/SparingSoftware/vue-on-resize#readme",
   "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "rollup": "^1.16.2",
+    "rollup-plugin-babel": "^4.3.3",
     "standard": "^12.0.1"
   },
   "dependencies": {}
