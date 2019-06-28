@@ -1,4 +1,19 @@
-import debounce from 'lodash.debounce'
+function debounce (cb, ms) {
+  let timer = null
+
+  return function (...args) {
+    const onComplete = () => {
+      cb.apply(this, args)
+      timer = null
+    }
+
+    if (timer) {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(onComplete, ms)
+  }
+}
 
 export default {
   install (Vue) {
