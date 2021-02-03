@@ -1,12 +1,12 @@
 {
   "name": "@sparing-software/vue-on-resize",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "Vue plugin for resize handlers",
-  "main": "dist/vue-on-resize.esm.js",
+  "main": "./dist/cjs/index",
+  "module": "./dist/esm/index",
   "scripts": {
-    "lint": "standard src/* build/*",
-    "build": "node build/build.main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublish": "npm run build",
+    "build": "rm -rf dist && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && tsc -p tsconfig-d.json"
   },
   "repository": {
     "type": "git",
@@ -26,11 +26,17 @@
   },
   "homepage": "https://github.com/SparingSoftware/vue-on-resize#readme",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "rollup": "^1.16.2",
-    "rollup-plugin-babel": "^4.3.3",
-    "standard": "^12.0.1"
+    "@types/node": "^14.14.22",
+    "typescript": "^4.1.3",
+    "vue": "^2.6.12"
   },
+  "peerDependencies": {
+    "vue": "^2.0.0"
+  },
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
   "dependencies": {}
 }
