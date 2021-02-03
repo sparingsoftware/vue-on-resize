@@ -1,25 +1,16 @@
-import _Vue from 'vue'
-
-export interface Resizer<T> {
-  fire: T
-  remove: Function
-}
-
-export type onResize = (
-  cb: (width: number, height: number, evt?: UIEvent) => void,
-  debounceTimeout?: number
-) => Resizer<typeof cb>
+import { PluginFunction, PluginObject, VueConstructor } from 'vue'
+import { ResizeCallback, Resizer, OnResize } from '../types'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $onResize: onResize
+    $onResize: OnResize
   }
 }
 
 function debounce(cb: EventListener, ms: number): (ev: UIEvent) => void {
-  let timer: ReturnType<typeof setTimeout> = null
+  let timer: ReturnType<typeof setTimeout> | null  = null
 
-  return function (...args: [UIEvent]): void {
+  return function (this: Vue, ...args: [UIEvent]): void {
     const onComplete = (): void => {
       cb.apply(this, args)
       timer = null
@@ -33,35 +24,38 @@ function debounce(cb: EventListener, ms: number): (ev: UIEvent) => void {
   }
 }
 
-export default {
-  install(Vue: typeof _Vue, options?: any): void {
-    const onResize: onResize = function (
-      cb,
-      debounceTimeout = 250
-    ): Resizer<typeof cb> {
-      const handler: EventListener = (evt?: UIEvent) =>
-        cb(window.innerWidth, window.innerHeight, evt)
+const install: PluginFunction<undefined> = (Vue): void => {
+  Vue.prototype.$onResize = function (
+    this: Vue,
+    callback: ResizeCallback,
+    debounceTimeout = 250
+  ): Resizer<ResizeCallback> {
+    const handler: EventListener = (evt) =>
+      callback(window.innerWidth, window.innerHeight, evt)
 
-      const debouncedHandler: ReturnType<typeof debounce> = debounce(
-        handler,
-        debounceTimeout
-      )
+    const debouncedHandler: ReturnType<typeof debounce> = debounce(
+      handler,
+      debounceTimeout
+    )
 
-      const remove: Function = (): void => {
-        window.removeEventListener('resize', debouncedHandler)
-      }
+    const remove = () => {
+      window.removeEventListener('resize', debouncedHandler)
+    }
 
-      window.addEventListener('resize', debouncedHandler)
-      this.$once('hook:beforeDestroy', remove)
+    window.addEventListener('resize', debouncedHandler)
+    this.$once('hook:beforeDestroy', remove)
 
-      function fire(): Resizer<typeof cb> {
-        handler(undefined)
-        return { fire, remove }
-      }
-
+    function fire(): Resizer<ResizeCallback> {
+      callback(window.innerWidth, window.innerHeight)
       return { fire, remove }
     }
 
-    Vue.prototype.$onResize = onResize
+    return { fire, remove }
   }
 }
+
+export const Plugin: PluginObject<undefined> = {
+  install: (Vue: VueConstructor) => install(Vue)
+}
+
+export default Plugin
