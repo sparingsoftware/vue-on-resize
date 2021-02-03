@@ -8,7 +8,7 @@ Vue plugin for resize handlers.
 
 Reduce your old code:
 ```js
-mounted () {
+mounted() {
   const resizeHandler = e => {
     // handler code
   }
@@ -23,7 +23,7 @@ mounted () {
 ```
 to simple:
 ```js
-mounted () {
+mounted() {
   this.$onResize(width => {
     // ... handler code
   }).fire()
@@ -47,7 +47,7 @@ Vue.use(VueOnResize)
 ## Examples
 Simple usage:
 ```js
-mounted () {
+mounted() {
   this.$onResize(width => {
     // ... handler code
   })
@@ -56,7 +56,7 @@ mounted () {
 
 Immediately execute callback:
 ```js
-mounted () {
+mounted() {
   this.$onResize(width => {
     // ... handler code
   }).fire()
@@ -65,7 +65,7 @@ mounted () {
 
 Programmatically execute callback:
 ```js
-mounted () {
+mounted() {
   const resizeHandler = this.$onResize(width => {
      // ... handler code
   }).fire()
@@ -76,7 +76,7 @@ mounted () {
 
 Custom debounce time (default 250ms):
 ```js
-mounted () {
+mounted() {
   this.$onResize(width => {
     // ... handler code
   }, 100)
@@ -85,7 +85,7 @@ mounted () {
 
 Get more info about resize event:
 ```js
-mounted () {
+mounted() {
   this.$onResize((windowWidth, windowHeight, event) => {
     // ... handler code
   })
